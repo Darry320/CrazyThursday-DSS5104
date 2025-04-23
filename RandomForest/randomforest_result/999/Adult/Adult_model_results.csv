@@ -1,0 +1,2 @@
+Accuracy,F1_score,AUC,time,cpu_before(%),cpu_after(%),cpu_occupied(%),memory_used(MB)
+0.5355444997236042,0.37735495101405225,0.7375580913389179,2.587698459625244,29.9,85.8,55.9,364.6640625
