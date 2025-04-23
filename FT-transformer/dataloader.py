@@ -1,7 +1,5 @@
 import pandas as pd
-import numpy as np
 import os
-import sys
 import sklearn.datasets
 from sklearn.model_selection import train_test_split
 
@@ -11,7 +9,7 @@ data_dir = os.path.join(os.path.dirname(script_dir), 'data') # Directory of the 
 print(f"Data directory: {data_dir}")
 
 dataset = { 'adult': ['adult/adult.data', 'adult/adult.test'],
-            'bank': 'bank+markerting/bank-additional-full.csv',
+            'bank': 'bank+marketing/bank-additional-full.csv',
             'credit': 'Credit Card Fraud Detection/creditcard.csv',
             'higgs': 'higgs/HIGGS.csv.gz',
             'covtype': 'covertype/covtype.data.gz',
@@ -51,18 +49,18 @@ def load_data(dataset_name,seed = 999):
         os.path.join(data_dir, dataset[dataset_name][0]),
         header=None,
         names=adult_cols,
-        sep=r",\s*",  # 处理逗号后的空格
+        sep=r",\s*",
         engine="python",
-        na_values="?",  # 将 "?" 标记为缺失值
+        na_values="?",
         )
         
         data_test = pd.read_csv(
         os.path.join(data_dir, dataset[dataset_name][1]),
         header=None,
         names=adult_cols,
-        sep=r",\s*",  # 处理逗号后的空格
+        sep=r",\s*",
         engine="python",
-        na_values="?",  # 将 "?" 标记为缺失值
+        na_values="?", 
         )
         
         data_test["income"] = data_test["income"].str.replace(".", "", regex=False)
@@ -76,7 +74,7 @@ def load_data(dataset_name,seed = 999):
         return data_train, data_test
     
     elif dataset_name == 'bank':
-        data = pd.read_csv(os.path.join(data_dir, dataset[dataset_name]))
+        data = pd.read_csv(os.path.join(data_dir, dataset[dataset_name]), sep=';')
         data = data.dropna()
         X,y = data.drop(columns=['y']), data['y']
         X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, stratify=y,shuffle=True, random_state=seed)
@@ -100,14 +98,14 @@ def load_data(dataset_name,seed = 999):
     elif dataset_name == 'higgs':
         data = pd.read_csv(
         os.path.join(data_dir, dataset[dataset_name]), 
-        compression="gzip",     # 指定压缩格式
-        header= None,            # 无表头
-        names=higgs_cols,      # 指定列名
-        sep=",",                # 分隔符（根据实际调整）
-        dtype="float32",        # 数据类型优化（可选）
+        compression="gzip",
+        header= None,
+        names=higgs_cols,
+        sep=",",
+        dtype="float32",
         )
         data = data.dropna()
-        data = data.sample(frac=0.1, random_state=seed)  # 只使用10%的数据
+        # data = data.sample(frac=0.1, random_state=seed)
         X,y = data.drop(columns=['class']), data['class']
         X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, stratify=y,shuffle=True, random_state=seed)
         task = 'binary classification'
@@ -121,10 +119,20 @@ def load_data(dataset_name,seed = 999):
         os.path.join(data_dir, dataset[dataset_name]),
         header=None,
         names=covertype_cols,
-        sep=r",\s*",  # 处理逗号后的空格
+        sep=r",\s*",
         engine="python",
         )
         data = data.dropna()
+        
+        data['Cover_Type'] = data['Cover_Type']-1
+        data['Cover_Type'] = data['Cover_Type'].astype('category')
+        
+        data['Wilderness_Area'] = data[[f'Wilderness_Area_{i}' for i in range(1,5)]].idxmax(axis=1).str.extract(r'(\d+)').astype(int)
+        data['Soil_Type'] = data[[f'Soil_Type_{i}' for i in range(1,41)]].idxmax(axis=1).str.extract(r'(\d+)').astype(int)
+        data['Wilderness_Area'] = data['Wilderness_Area'].astype('category')
+        data['Soil_Type'] = data['Soil_Type'].astype('category')
+        data = data.drop(columns=[f'Wilderness_Area_{i}' for i in range(1,5)] + [f'Soil_Type_{i}' for i in range(1,41)])
+        
         X,y = data.drop(columns=['Cover_Type']), data['Cover_Type']
         X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, stratify=y,shuffle=True, random_state=seed)
         task = 'multi-class classification'
@@ -150,6 +158,11 @@ def load_data(dataset_name,seed = 999):
         )
         data_train = data_train.dropna()
         data_test = data_test.dropna()
+
+        for col in data_train.columns:
+            data_train[col] = data_train[col].astype('category')
+        for col in data_test.columns:
+            data_test[col] = data_test[col].astype('category')
         
         X_train, y_train = data_train.drop(columns=['CLASS']), data_train['CLASS']
         X_test, y_test = data_test.drop(columns=['CLASS']), data_test['CLASS']
