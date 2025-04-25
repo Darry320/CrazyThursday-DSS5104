@@ -43,6 +43,61 @@ covertype_cols = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrol
 
 poker_cols = ['S1', 'C1', 'S2', 'C2', 'S3', 'C3', 'S4', 'C4', 'S5', 'C5', 'CLASS']
 
+
+    # if dataset.startswith("adult"):
+    #     data_train, data_test = load_data("adult")
+    #     X_train = data_train.drop(columns=['income'])
+    #     y_train = data_train['income']
+    #     X_val = data_test.drop(columns=['income'])
+    #     y_val = data_test['income']
+    #     y_train = (y_train == '>50K').astype(int)
+    #     y_val = (y_val == '>50K').astype(int)
+    #     task_type = "classification"
+        
+    # elif dataset.startswith("california"):
+    #     X_train, X_val, y_train, y_val = load_data("california")
+    #     task_type = "regression"
+        
+    # elif dataset.startswith("higgs"):
+    #     X_train, X_val, y_train, y_val = load_data("higgs")
+    #     y_train = (y_train == 1).astype(int)
+    #     y_val = (y_val == 1).astype(int)
+    #     task_type = "classification"
+        
+    # elif dataset.startswith("churn"):
+    #     X_train, X_val, y_train, y_val = load_data("churn")
+    #     y_train = (y_train == 'Yes').astype(int)
+    #     y_val = (y_val == 'Yes').astype(int)
+    #     task_type = "classification"
+        
+    # elif dataset.startswith("creditcard"):
+    #     X_train, X_val, y_train, y_val = load_data("credit")
+    #     y_train = (y_train == 1).astype(int)
+    #     y_val = (y_val == 1).astype(int)
+    #     task_type = "classification"
+        
+    # elif dataset.startswith("poker"):
+    #     X_train, X_val, y_train, y_val = load_data("poker") 
+    #     task_type = "classification" 
+        
+    # elif dataset.startswith("bank"):
+    #     X_train, X_val, y_train, y_val = load_data("bank")
+    #     y_train = (y_train == 'yes').astype(int)
+    #     y_val = (y_val == 'yes').astype(int)
+    #     task_type = "classification"
+        
+    # elif dataset.startswith("wine"):
+    #     X_train, X_val, y_train, y_val = load_data("wine")
+    #     task_type = "regression"
+        
+    # elif dataset.startswith("covtype"):
+    #     X_train, X_val, y_train, y_val = load_data("covtype")
+    #     task_type = "classification"
+        
+    # else:
+    #     raise ValueError(f"Unsupported dataset: {dataset}")
+
+
 def load_data(dataset_name,seed = 999):
     print(f'Seeding: {seed}')
     if dataset_name == 'adult':
