@@ -44,6 +44,7 @@ covertype_cols = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrol
 poker_cols = ['S1', 'C1', 'S2', 'C2', 'S3', 'C3', 'S4', 'C4', 'S5', 'C5', 'CLASS']
 
 def load_data(dataset_name,seed = 999):
+    print(f'Seeding: {seed}')
     if dataset_name == 'adult':
         data_train = pd.read_csv(
         os.path.join(data_dir, dataset[dataset_name][0]),
@@ -188,6 +189,7 @@ def load_data(dataset_name,seed = 999):
         data = pd.read_csv(os.path.join(data_dir, dataset[dataset_name]))
         data = data.drop(columns=['customerID'])
         data['TotalCharges'] = pd.to_numeric(data['TotalCharges'], errors='coerce')
+        data['SeniorCitizen'] = data['SeniorCitizen'].astype('category')
         data = data.dropna()
         X,y = data.drop(columns=['Churn']), data['Churn']
         X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.2, stratify=y,shuffle=True, random_state=seed)
