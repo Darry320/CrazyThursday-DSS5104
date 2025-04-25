@@ -12,7 +12,7 @@ import torch
 import gzip
 import matplotlib.pyplot as plt
 import seaborn as sns
-# 要不要把dataloader.py挪出来捏
+# Use old version of dataloader
 from dataloaderversion1 import load_data
 
 def clean_target_column(df, y_col):
