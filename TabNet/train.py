@@ -13,7 +13,7 @@ import gzip
 import matplotlib.pyplot as plt
 import seaborn as sns
 # 要不要把dataloader.py挪出来捏
-from dataloader import load_data
+from dataloaderversion1 import load_data
 
 def clean_target_column(df, y_col):
     df[y_col] = df[y_col].astype(str).str.strip().str.replace('.', '', regex=False)
@@ -103,7 +103,7 @@ def run_tabnet_experiment(dataset_name):
         eval_set=[(X_test, y_test)],
         eval_metric=["accuracy" if task_type == "classification" else "rmse"],
         max_epochs=100,
-        patience=100,
+        patience=20,
         batch_size=1024,
         virtual_batch_size=128,
     )
@@ -137,7 +137,7 @@ def run_tabnet_experiment(dataset_name):
         disp.plot(cmap="Blues", xticks_rotation=45)
         plt.title(f"{dataset_name} - Confusion Matrix")
         plt.tight_layout()
-        plt.savefig(os.path.join(result_dir, "confusion_matrix.png"))
+        # plt.savefig(os.path.join(result_dir, "confusion_matrix.png"))
         plt.close()
 
     elif task_type == "regression":
@@ -159,4 +159,4 @@ def run_tabnet_experiment(dataset_name):
 
     print(f"[✔] Results and model saved to: {result_dir}")
 
-run_tabnet_experiment("california")
+# run_tabnet_experiment("adult")
